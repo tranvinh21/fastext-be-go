@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-
 	db := db.NewDB()
 	port := config.Envs.Server.PORT
 	apiServer := api.NewAPIServer(db, port)

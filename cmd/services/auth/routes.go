@@ -50,7 +50,7 @@ func (h *AuthHandler) checkUserExists(c *fiber.Ctx, field string, value string) 
 	if user != nil {
 		message := "Email already exists"
 		if field == "name" {
-			message = "name already exists"
+			message = "Name already exists"
 		}
 		return errors.New(message)
 	}

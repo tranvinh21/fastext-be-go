@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/tranvinh21/fastext-be-go/cmd/services/auth"
 	"github.com/tranvinh21/fastext-be-go/cmd/services/user"
+	"github.com/tranvinh21/fastext-be-go/config"
 	"gorm.io/gorm"
 )
 
@@ -26,7 +27,7 @@ func (s *APIServer) Run() {
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:8080",
+		AllowOrigins:     config.Envs.CORS.WHITELIST_DOMAINS,
 		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
 		AllowMethods:     "GET,POST,PUT,DELETE,OPTIONS",
 		AllowCredentials: true,
