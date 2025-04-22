@@ -2,9 +2,8 @@ package config
 
 import (
 	"log"
-	"os"
-
-	"github.com/joho/godotenv"
+	
+	"github.com/spf13/viper"
 )
 
 var Envs = LoadConfig()
@@ -34,28 +33,29 @@ type Config struct {
 }
 
 func LoadConfig() *Config {
-	err := godotenv.Load()
+	viper.SetConfigFile(".env")
+	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
-	dbURL := os.Getenv("DATABASE_URL")
+	dbURL := viper.GetString("DATABASE_URL")
 	if dbURL == "" {
 		log.Fatal("DATABASE_URL is not set")
 	}
-	port := os.Getenv("PORT")
+	port := viper.GetString("PORT")
 	if port == "" {
 		port = "3000"
 	}
-	accessTokenSecret := os.Getenv("ACCESS_TOKEN_SECRET")
+	accessTokenSecret := viper.GetString("ACCESS_TOKEN_SECRET")
 	if accessTokenSecret == "" {
 		log.Fatal("ACCESS_TOKEN_SECRET is not set")
 	}
-	refreshTokenSecret := os.Getenv("REFRESH_TOKEN_SECRET")
+	refreshTokenSecret := viper.GetString("REFRESH_TOKEN_SECRET")
 	if refreshTokenSecret == "" {
 		log.Fatal("REFRESH_TOKEN_SECRET is not set")
 	}
-	whitelistDomains := os.Getenv("WHITELIST_DOMAINS")
+	whitelistDomains := viper.GetString("WHITELIST_DOMAINS")
 	if whitelistDomains == "" {
 		whitelistDomains = "*"
 	}
