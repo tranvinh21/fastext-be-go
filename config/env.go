@@ -2,7 +2,7 @@ package config
 
 import (
 	"log"
-	
+
 	"github.com/spf13/viper"
 )
 
@@ -34,10 +34,9 @@ type Config struct {
 
 func LoadConfig() *Config {
 	viper.SetConfigFile(".env")
-	err := viper.ReadInConfig()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	_ = viper.ReadInConfig() // Ignore error in Railway
+	viper.AutomaticEnv() 
+
 
 	dbURL := viper.GetString("DATABASE_URL")
 	if dbURL == "" {
