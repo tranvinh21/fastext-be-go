@@ -2,8 +2,9 @@ package config
 
 import (
 	"log"
+	"os"
 
-	"github.com/spf13/viper"
+	"github.com/joho/godotenv"
 )
 
 var Envs = LoadConfig()
