@@ -33,31 +33,13 @@ type Config struct {
 }
 
 func LoadConfig() *Config {
-	viper.SetConfigFile(".env")
-	_ = viper.ReadInConfig() // Ignore error in Railway
-	viper.AutomaticEnv() 
+	_ = godotenv.Load()
+	dbURL := GetEnv("DATABASE_URL", "")
+	port := GetEnv("PORT", "3000")
+	accessTokenSecret := GetEnv("ACCESS_TOKEN_SECRET", "")
+	refreshTokenSecret := GetEnv("REFRESH_TOKEN_SECRET", "")
+	whitelistDomains := GetEnv("WHITELIST_DOMAINS", "*")
 
-
-	dbURL := viper.GetString("DATABASE_URL")
-	if dbURL == "" {
-		log.Fatal("DATABASE_URL is not set")
-	}
-	port := viper.GetString("PORT")
-	if port == "" {
-		port = "3000"
-	}
-	accessTokenSecret := viper.GetString("ACCESS_TOKEN_SECRET")
-	if accessTokenSecret == "" {
-		log.Fatal("ACCESS_TOKEN_SECRET is not set")
-	}
-	refreshTokenSecret := viper.GetString("REFRESH_TOKEN_SECRET")
-	if refreshTokenSecret == "" {
-		log.Fatal("REFRESH_TOKEN_SECRET is not set")
-	}
-	whitelistDomains := viper.GetString("WHITELIST_DOMAINS")
-	if whitelistDomains == "" {
-		whitelistDomains = "*"
-	}
 	return &Config{
 		DB: DBConfig{
 			DB_URL: dbURL,
@@ -73,4 +55,15 @@ func LoadConfig() *Config {
 			WHITELIST_DOMAINS: whitelistDomains,
 		},
 	}
+}
+
+func GetEnv(key string, defaultValue string) string {
+	value := os.Getenv(key)
+	if value == "" && defaultValue != "" {
+		return defaultValue
+	}
+	if value == "" {
+		log.Fatalf("Environment variable %s is not set", key)
+	}
+	return value
 }
